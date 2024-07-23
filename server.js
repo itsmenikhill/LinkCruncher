@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -5,10 +6,8 @@ const ShortUrl = require("./models/ShortUrls");
 const crunch = require("./Controllers/shortUrlController");
 const countItems = require("./Controllers/schemaCounter");
 
-mongoose.connect("mongodb://0.0.0.0:27017/urlShortener", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const mongoUri = process.env.MONGODB_URI;
+mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
@@ -22,9 +21,7 @@ app.post("/crunchLink", async (req, res) => {
   try {
     const count = await countItems();
     const crunchedUrl = crunch(count);
-
     if (req.body.fullUrl == "") {
-      console.log("req.body:", req.body);
       const shortUrls = await ShortUrl.find();
       res.render("index", {
         message: "Please enter a URL",
@@ -65,4 +62,4 @@ app.get("/:crunchedLink", async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT || 5000);
+app.listen(process.env.PORT);
