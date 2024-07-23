@@ -23,7 +23,7 @@
         />
         <button type="submit" class="btn btn-success">Shorten URL</button>
         <% if(typeof message !== 'undefined'){%>
-          <div class="alert alert-warning"><%= message %></div>
+          <div id="alert-message" class="alert alert-warning my-2"><%= message %></div>
         <%}%>
       </form>
 
@@ -45,5 +45,16 @@
         </tbody>
       </table>
     </div>
+    
+    <script>
+      window.addEventListener('DOMContentLoaded', (event)=>{
+        const alertMesasge = document.getElementById('alert-message')
+        if(alertMesasge){
+          setTimeout(()=>{
+            alertMesasge.style.display='none'
+          }, 3000)
+        }
+      })
+    </script>
   </body>
 </html>
