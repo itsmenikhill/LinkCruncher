@@ -9,7 +9,9 @@
     />
   </head>
   <body>
-    <div class="container">
+    <script src='../server.js'></script>
+    <div class="container" id='container'>
+      <h3 class="my-4">LinkCrunch</h3>
       <form action="/crunchLink" method="POST" class="form-inline my-4">
         <!-- <label for="fullUrl">URL</label> -->
         <input
@@ -22,7 +24,7 @@
         <button type="submit" class="btn btn-success">Shorten URL</button>
       </form>
 
-      <table>
+      <table class="table table-striped">
         <thead>
           <tr>
             <th>Full URL</th>
