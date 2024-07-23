@@ -19,24 +19,39 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/crunchLink", async (req, res) => {
-  const count = await countItems();
-  const crunchedUrl = crunch(count);
-  const fullUrl = await ShortUrl.findOne({ full: req.body.fullUrl });
-  if (fullUrl == null) {
-    await ShortUrl.create({
-      full: req.body.fullUrl,
-      short: crunchedUrl,
-    });
-  }
-    res.redirect("/");
+    try {
+        const count = await countItems();
+        const crunchedUrl = crunch(count);
+        const fullUrl = await ShortUrl.findOne({ full: req.body.fullUrl });
+    
+        if (fullUrl == null) {
+          await ShortUrl.create({
+            full: req.body.fullUrl,
+            short: crunchedUrl,
+          });
+          res.redirect('/')
+        }
+        else{
+            const shortUrls = await ShortUrl.find();
+            res.render("index", {message:'URL already exists', shortUrls: shortUrls });
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while processing your request.");
+      }
 });
 
 app.get("/:crunchedLink", async (req, res) => {
-  const shortUrl = await ShortUrl.findOne({ short: req.params.crunchedLink });
-  if (shortUrl == null) {
-    res.sendStatus(400);
-  }
-  res.redirect(shortUrl.full);
+    try {
+        const shortUrl = await ShortUrl.findOne({ short: req.params.crunchedLink });
+        if (shortUrl == null) {
+          return res.status(404).send('URL not found');
+        }
+        res.redirect(shortUrl.full);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while processing your request.');
+      }
 });
 
 app.listen(process.env.PORT || 5000);
