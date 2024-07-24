@@ -1,3 +1,13 @@
+body{
+    font-family: "Chakra Petch", sans-serif;
+}
+
+.heading{
+    text-align: center;
+    margin: 20px;
+    font-size: 4rem;
+}
+
 .container{
     max-width: 70%;
 }
@@ -42,3 +52,22 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+  .chakra-petch-regular {
+    font-family: "Chakra Petch", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  .chakra-petch-medium {
+    font-family: "Chakra Petch", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  .chakra-petch-semibold {
+    font-family: "Chakra Petch", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+  }
+  
