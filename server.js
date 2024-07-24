@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 const ShortUrl = require("./models/ShortUrls");
 const crunch = require("./Controllers/shortUrlController");
 const countItems = require("./Controllers/schemaCounter");
+const path = require('path');
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 const mongoUri = process.env.MONGODB_URI;
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });

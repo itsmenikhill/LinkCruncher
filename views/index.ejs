@@ -7,13 +7,55 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <style>
+      /* Popup container - can be anything you want */
+      .popup {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      /* Popup content */
+      .popup-content {
+        position: relative;
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 300px;
+        text-align: center;
+      }
+
+      /* Close button */
+      .close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
-    <script src='../server.js'></script>
-    <div class="container" id='container'>
+    <script src="../server.js"></script>
+    <div class="container" id="container">
       <h3 class="my-4">LinkCrunch</h3>
       <form action="/crunchLink" method="POST" class="form-inline my-4">
-        <!-- <label for="fullUrl">URL</label> -->
         <input
           placeholder="URL"
           type="url"
@@ -23,7 +65,9 @@
         />
         <button type="submit" class="btn btn-success">Shorten URL</button>
         <% if(typeof message !== 'undefined'){%>
-          <div id="alert-message" class="alert alert-warning my-2"><%= message %></div>
+        <div id="alert-message" class="alert alert-warning my-2">
+          <%= message %>
+        </div>
         <%}%>
       </form>
 
@@ -32,6 +76,7 @@
           <tr>
             <th>Full URL</th>
             <th>Short URL</th>
+            <th>QR Code</th>
           </tr>
         </thead>
         <tbody>
@@ -39,22 +84,31 @@
           <tr>
             <td><a href="<%= shortUrl.full %>"><%= shortUrl.full %></a></td>
             <td><a href="<%= shortUrl.short %>"><%= shortUrl.short %></a></td>
-            <td><%= shortUrl.clicks %></td>
+            <td>
+              <button class="show-qr-button" data-url="<%= shortUrl.full %>">
+                Show QR Code
+              </button>
+              <img
+                class="qr-code"
+                src=""
+                alt="QR Code"
+                title="QR Code"
+                style="display: none"
+              />
+            </td>
           </tr>
           <% }) %>
         </tbody>
       </table>
+      <div id="qrPopup" class="popup">
+        <div class="popup-content">
+          <span class="close">&times;</span>
+          <img id="qrImage" src="" alt="QR Code" title="QR Code" />
+        </div>
+      </div>
     </div>
-    
-    <script>
-      window.addEventListener('DOMContentLoaded', (event)=>{
-        const alertMesasge = document.getElementById('alert-message')
-        if(alertMesasge){
-          setTimeout(()=>{
-            alertMesasge.style.display='none'
-          }, 3000)
-        }
-      })
-    </script>
+
+    <script src="./alert.js"></script>
+    <script src="./qrCodeButton.js"></script>
   </body>
 </html>
