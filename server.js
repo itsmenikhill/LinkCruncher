@@ -3,8 +3,8 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const ShortUrl = require("./models/ShortUrls");
-const crunch = require("./Controllers/shortUrlController");
-const countItems = require("./Controllers/schemaCounter");
+const crunch = require("./controllers/shortUrlController");
+const countItems = require("./controllers/schemaCounter");
 const path = require('path');
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -35,9 +35,13 @@ app.post("/crunchLink", async (req, res) => {
       if (fullUrl == null) {
         await ShortUrl.create({
           full: req.body.fullUrl,
-          short: crunchedUrl,
+          short: `${req.protocol}://${req.get('host')}/${crunchedUrl}`,
         });
-        res.redirect("/");
+        res.render('index', {
+          shortUrls: await ShortUrl.find(),
+          message: 'URL shortened successfully!',
+          short: `${req.protocol}://${req.get('host')}/${ShortUrl.short}`
+        });
       } else {
         const shortUrls = await ShortUrl.find();
         res.render("index", {
